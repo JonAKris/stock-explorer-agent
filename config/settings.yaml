@@ -1,0 +1,38 @@
+yaml
+database:
+  host: "localhost"
+  port: 5432
+  name: "eodhd"
+  user: "postgres"
+  password: "${DB_PASSWORD}"
+
+ollama:
+  host: "http://127.0.0.1:11434"
+  exploration_model: "mistral:7b-instruct-v0.2-q8_0"
+  analysis_model: "mixtral:8x7b-instruct-v0.1-q5_K_M"
+
+agent:
+  max_exploration_depth: 5
+  results_per_query_limit: 100
+  sleep_between_queries: 2
+  max_concurrent_investigations: 3
+  strategy_weights:
+    value_quality: 0.25
+    growth_momentum: 0.20
+    insider_smart_money: 0.20
+    sentiment_news: 0.15
+    earnings_surprises: 0.10
+    options_flow: 0.10
+
+scheduling:
+  deep_exploration_times:
+    - "02:00"
+    - "14:00"
+  quick_scan_interval_minutes: 360
+
+output:
+  findings_dir: "./findings"
+  log_dir: "./logs"
+  save_raw_results: true
+  generate_summary_html: true
+

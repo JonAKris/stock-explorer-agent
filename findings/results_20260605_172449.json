@@ -1,0 +1,990 @@
+{
+  "timestamp": "20260605_172449",
+  "total_strategies_run": 24,
+  "total_tickers_found": 44,
+  "multi_signal_stocks": {
+    "NVDA.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "dividend_income",
+      "sentiment_divergence",
+      "price_momentum_leaders"
+    ],
+    "V.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "dividend_income",
+      "sentiment_divergence"
+    ],
+    "JPM.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "dividend_income",
+      "sentiment_divergence",
+      "earnings_miss_opportunity",
+      "price_momentum_leaders"
+    ],
+    "MSFT.US": [
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "dividend_income",
+      "sentiment_divergence",
+      "price_momentum_leaders"
+    ],
+    "AAPL.US": [
+      "value_quality_composite",
+      "earnings_beaters",
+      "dividend_income",
+      "sentiment_divergence",
+      "price_momentum_leaders"
+    ],
+    "META.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "sentiment_divergence"
+    ],
+    "SCHW.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income"
+    ],
+    "RYCEF.US": [
+      "dividend_income",
+      "value_quality_composite"
+    ],
+    "RYCEY.US": [
+      "dividend_income",
+      "value_quality_composite",
+      "sentiment_divergence"
+    ],
+    "AXP.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "dividend_income"
+    ],
+    "HD.US": [
+      "sentiment_divergence",
+      "value_quality_composite",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "earnings_miss_opportunity"
+    ],
+    "ADP.US": [
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "sentiment_divergence",
+      "price_momentum_leaders"
+    ],
+    "QCOM.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "sentiment_divergence",
+      "price_momentum_leaders"
+    ],
+    "PG.US": [
+      "sentiment_divergence",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "dividend_income",
+      "earnings_miss_opportunity"
+    ],
+    "KO.US": [
+      "earnings_beaters",
+      "congressional_trading",
+      "dividend_income",
+      "value_quality_composite"
+    ],
+    "ASML.NEO": [
+      "dividend_income",
+      "price_momentum_leaders",
+      "value_quality_composite"
+    ],
+    "ASML.US": [
+      "sentiment_divergence",
+      "value_quality_composite",
+      "earnings_beaters",
+      "dividend_income",
+      "earnings_miss_opportunity",
+      "price_momentum_leaders"
+    ],
+    "TM.US": [
+      "sentiment_divergence",
+      "value_quality_composite",
+      "earnings_beaters",
+      "dividend_income",
+      "earnings_miss_opportunity"
+    ],
+    "PYPL.US": [
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "sentiment_divergence"
+    ],
+    "INTU.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "sentiment_divergence"
+    ],
+    "ARI.US": [
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "earnings_miss_opportunity"
+    ],
+    "AMAT.US": [
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "sentiment_divergence",
+      "price_momentum_leaders"
+    ],
+    "MU.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "sentiment_divergence",
+      "price_momentum_leaders"
+    ],
+    "GE.US": [
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "sentiment_divergence",
+      "price_momentum_leaders"
+    ],
+    "SNA.US": [
+      "sentiment_divergence",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "earnings_miss_opportunity"
+    ],
+    "BLK.US": [
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "earnings_miss_opportunity"
+    ],
+    "AMZN.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "earnings_miss_opportunity"
+    ],
+    "C.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "earnings_miss_opportunity",
+      "price_momentum_leaders"
+    ],
+    "TMO.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "sentiment_divergence"
+    ],
+    "GM.US": [
+      "sentiment_divergence",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "earnings_miss_opportunity",
+      "price_momentum_leaders"
+    ],
+    "SYK.US": [
+      "sentiment_divergence",
+      "value_quality_composite",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "earnings_miss_opportunity"
+    ],
+    "ROK.US": [
+      "congressional_selling_alert",
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "price_momentum_leaders"
+    ],
+    "LITE.US": [
+      "earnings_beaters",
+      "congressional_trading",
+      "value_quality_composite",
+      "fund_holder_conviction"
+    ],
+    "BYDDY.US": [
+      "dividend_income",
+      "value_quality_composite",
+      "earnings_miss_opportunity"
+    ],
+    "MCHP.US": [
+      "value_quality_composite",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "sentiment_divergence"
+    ],
+    "INTC.US": [
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "sentiment_divergence",
+      "price_momentum_leaders"
+    ],
+    "F.US": [
+      "congressional_selling_alert",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "dividend_income",
+      "sentiment_divergence",
+      "price_momentum_leaders"
+    ],
+    "AAOI.US": [
+      "congressional_selling_alert",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "sentiment_divergence",
+      "price_momentum_leaders"
+    ],
+    "LMND.US": [
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction"
+    ],
+    "SNOW.US": [
+      "earnings_beaters",
+      "congressional_trading",
+      "congressional_selling_alert",
+      "price_momentum_leaders"
+    ],
+    "NET.US": [
+      "congressional_selling_alert",
+      "earnings_beaters",
+      "congressional_trading",
+      "fund_holder_conviction",
+      "sentiment_divergence",
+      "price_momentum_leaders"
+    ],
+    "RDW.US": [
+      "congressional_trading",
+      "congressional_selling_alert",
+      "price_momentum_leaders"
+    ]
+  },
+  "top_conviction": [
+    {
+      "ticker": "JPM.US",
+      "signals": [
+        "congressional_selling_alert",
+        "value_quality_composite",
+        "earnings_beaters",
+        "congressional_trading",
+        "dividend_income",
+        "sentiment_divergence",
+        "earnings_miss_opportunity",
+        "price_momentum_leaders"
+      ]
+    },
+    {
+      "ticker": "QCOM.US",
+      "signals": [
+        "congressional_selling_alert",
+        "value_quality_composite",
+        "earnings_beaters",
+        "congressional_trading",
+        "fund_holder_conviction",
+        "dividend_income",
+        "sentiment_divergence",
+        "price_momentum_leaders"
+      ]
+    },
+    {
+      "ticker": "MU.US",
+      "signals": [
+        "congressional_selling_alert",
+        "value_quality_composite",
+        "earnings_beaters",
+        "congressional_trading",
+        "fund_holder_conviction",
+        "dividend_income",
+        "sentiment_divergence",
+        "price_momentum_leaders"
+      ]
+    },
+    {
+      "ticker": "C.US",
+      "signals": [
+        "congressional_selling_alert",
+        "value_quality_composite",
+        "earnings_beaters",
+        "congressional_trading",
+        "fund_holder_conviction",
+        "dividend_income",
+        "earnings_miss_opportunity",
+        "price_momentum_leaders"
+      ]
+    },
+    {
+      "ticker": "GM.US",
+      "signals": [
+        "sentiment_divergence",
+        "value_quality_composite",
+        "earnings_beaters",
+        "congressional_trading",
+        "fund_holder_conviction",
+        "dividend_income",
+        "earnings_miss_opportunity",
+        "price_momentum_leaders"
+      ]
+    },
+    {
+      "ticker": "NVDA.US",
+      "signals": [
+        "congressional_selling_alert",
+        "value_quality_composite",
+        "earnings_beaters",
+        "congressional_trading",
+        "dividend_income",
+        "sentiment_divergence",
+        "price_momentum_leaders"
+      ]
+    },
+    {
+      "ticker": "META.US",
+      "signals": [
+        "congressional_selling_alert",
+        "value_quality_composite",
+        "earnings_beaters",
+        "congressional_trading",
+        "fund_holder_conviction",
+        "dividend_income",
+        "sentiment_divergence"
+      ]
+    },
+    {
+      "ticker": "ADP.US",
+      "signals": [
+        "value_quality_composite",
+        "earnings_beaters",
+        "congressional_trading",
+        "fund_holder_conviction",
+        "dividend_income",
+        "sentiment_divergence",
+        "price_momentum_leaders"
+      ]
+    },
+    {
+      "ticker": "INTU.US",
+      "signals": [
+        "congressional_selling_alert",
+        "value_quality_composite",
+        "earnings_beaters",
+        "congressional_trading",
+        "fund_holder_conviction",
+        "dividend_income",
+        "sentiment_divergence"
+      ]
+    },
+    {
+      "ticker": "AMAT.US",
+      "signals": [
+        "value_quality_composite",
+        "earnings_beaters",
+        "congressional_trading",
+        "fund_holder_conviction",
+        "dividend_income",
+        "sentiment_divergence",
+        "price_momentum_leaders"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "strategy": "value_quality_composite",
+      "params": {
+        "min_mcap": 100000000,
+        "pctile": 25,
+        "limit": 25
+      },
+      "tickers": [
+        "NVDA.US",
+        "V.US",
+        "JPM.US",
+        "MSFT.US",
+        "AAPL.US",
+        "META.US",
+        "SCHW.US",
+        "RYCEF.US",
+        "RYCEY.US",
+        "AXP.US"
+      ],
+      "count": 25,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "value_quality_composite",
+      "params": {
+        "min_mcap": 500000000,
+        "pctile": 50,
+        "limit": 50
+      },
+      "tickers": [
+        "NVDA.US",
+        "V.US",
+        "JPM.US",
+        "MSFT.US",
+        "AAPL.US",
+        "META.US",
+        "SCHW.US",
+        "RYCEF.US",
+        "RYCEY.US",
+        "AXP.US"
+      ],
+      "count": 35,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "value_quality_composite",
+      "params": {
+        "min_mcap": 500000000,
+        "pctile": 40,
+        "limit": 50
+      },
+      "tickers": [
+        "NVDA.US",
+        "V.US",
+        "JPM.US",
+        "MSFT.US",
+        "AAPL.US",
+        "META.US",
+        "SCHW.US",
+        "RYCEF.US",
+        "RYCEY.US",
+        "AXP.US"
+      ],
+      "count": 35,
+      "insight": "",
+      "confidence": 0.8
+    },
+    {
+      "strategy": "congressional_trading",
+      "params": {
+        "days": 90,
+        "limit": 25
+      },
+      "tickers": [
+        "MSFT.US",
+        "PYPL.US",
+        "KO.US",
+        "AMAT.US",
+        "ADP.US",
+        "BLK.US",
+        "INTC.US",
+        "LITE.US",
+        "GE.US",
+        "HD.US"
+      ],
+      "count": 25,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "congressional_trading",
+      "params": {
+        "days": 180,
+        "limit": 50
+      },
+      "tickers": [
+        "MSFT.US",
+        "C.US",
+        "F.US",
+        "SYK.US",
+        "MCHP.US",
+        "ARI.US",
+        "INTC.US",
+        "AMAT.US",
+        "GM.US",
+        "V.US"
+      ],
+      "count": 35,
+      "insight": "",
+      "confidence": 0
+    },
+    {
+      "strategy": "congressional_selling_alert",
+      "params": {
+        "days": 90,
+        "limit": 50
+      },
+      "tickers": [
+        "RDW.US",
+        "SNOW.US",
+        "NET.US",
+        "NVDA.US",
+        "AAOI.US",
+        "AMZN.US",
+        "META.US",
+        "MU.US",
+        "SCHW.US",
+        "ROK.US"
+      ],
+      "count": 16,
+      "insight": "Significant seller activity for the tickers of interest.",
+      "confidence": 0.8
+    },
+    {
+      "strategy": "congressional_selling_alert",
+      "params": {
+        "days": 60,
+        "limit": 50
+      },
+      "tickers": [
+        "RDW.US",
+        "NET.US",
+        "ROK.US",
+        "SCHW.US",
+        "META.US",
+        "JPM.US",
+        "AMZN.US",
+        "SNOW.US",
+        "AXP.US",
+        "C.US"
+      ],
+      "count": 13,
+      "insight": "Multiple sellers and a high number of sell trades for certain tickers could indicate bearish sentiment towards these companies.",
+      "confidence": 0.8
+    },
+    {
+      "strategy": "congressional_selling_alert",
+      "params": {
+        "days": 60,
+        "limit": 50
+      },
+      "tickers": [
+        "RDW.US",
+        "NET.US",
+        "ROK.US",
+        "SCHW.US",
+        "META.US",
+        "JPM.US",
+        "AMZN.US",
+        "SNOW.US",
+        "AXP.US",
+        "C.US"
+      ],
+      "count": 13,
+      "insight": "Several individuals have sold shares in Redwire Corp (RDW.US), Cloudflare Inc (NET.US), and Rockwell Automation Inc (ROK.US). This could be a potential selling signal for these tickers.",
+      "confidence": 0.8
+    },
+    {
+      "strategy": "sentiment_divergence",
+      "params": {
+        "recent": 14,
+        "total": 30,
+        "limit": 25
+      },
+      "tickers": [
+        "GE.US",
+        "PYPL.US",
+        "ASML.US",
+        "AMAT.US",
+        "TMO.US",
+        "F.US",
+        "INTU.US",
+        "QCOM.US",
+        "TM.US",
+        "MU.US"
+      ],
+      "count": 25,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "sentiment_divergence",
+      "params": {
+        "recent": 14,
+        "total": 30,
+        "limit": 25
+      },
+      "tickers": [
+        "GE.US",
+        "PYPL.US",
+        "ASML.US",
+        "AMAT.US",
+        "TMO.US",
+        "F.US",
+        "INTU.US",
+        "QCOM.US",
+        "TM.US",
+        "MU.US"
+      ],
+      "count": 25,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "sentiment_divergence",
+      "params": {
+        "recent": 14,
+        "total": 60,
+        "limit": 25
+      },
+      "tickers": [
+        "AMAT.US",
+        "RYCEY.US",
+        "GE.US",
+        "PYPL.US",
+        "MCHP.US",
+        "HD.US",
+        "TMO.US",
+        "TM.US",
+        "F.US",
+        "MU.US"
+      ],
+      "count": 25,
+      "insight": "",
+      "confidence": 0.8
+    },
+    {
+      "strategy": "earnings_beaters",
+      "params": {
+        "months": 12,
+        "quarters": 3,
+        "limit": 25
+      },
+      "tickers": [
+        "INTC.US",
+        "TM.US",
+        "F.US",
+        "AMZN.US",
+        "MCHP.US",
+        "LMND.US",
+        "C.US",
+        "GM.US",
+        "SNOW.US",
+        "MU.US"
+      ],
+      "count": 25,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "earnings_beaters",
+      "params": {
+        "months": 12,
+        "quarters": 3,
+        "limit": 50
+      },
+      "tickers": [
+        "INTC.US",
+        "TM.US",
+        "F.US",
+        "AMZN.US",
+        "MCHP.US",
+        "LMND.US",
+        "C.US",
+        "GM.US",
+        "SNOW.US",
+        "MU.US"
+      ],
+      "count": 34,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "earnings_beaters",
+      "params": {
+        "months": 12,
+        "quarters": 4,
+        "limit": 50
+      },
+      "tickers": [
+        "MCHP.US",
+        "LMND.US",
+        "MU.US",
+        "GE.US",
+        "ROK.US",
+        "NET.US",
+        "PYPL.US",
+        "MSFT.US",
+        "META.US",
+        "LITE.US"
+      ],
+      "count": 19,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "earnings_miss_opportunity",
+      "params": {
+        "limit": 25
+      },
+      "tickers": [
+        "GM.US",
+        "BYDDY.US",
+        "ARI.US",
+        "C.US",
+        "BLK.US",
+        "SYK.US",
+        "ASML.US",
+        "TM.US",
+        "JPM.US",
+        "PG.US"
+      ],
+      "count": 13,
+      "insight": "",
+      "confidence": 0
+    },
+    {
+      "strategy": "earnings_miss_opportunity",
+      "params": {
+        "limit": 50
+      },
+      "tickers": [
+        "GM.US",
+        "BYDDY.US",
+        "ARI.US",
+        "C.US",
+        "BLK.US",
+        "SYK.US",
+        "ASML.US",
+        "TM.US",
+        "JPM.US",
+        "PG.US"
+      ],
+      "count": 13,
+      "insight": "Monitor for potential earnings surprises or negative revisions to earnings estimates",
+      "confidence": 0.8
+    },
+    {
+      "strategy": "earnings_miss_opportunity",
+      "params": {
+        "limit": 50
+      },
+      "tickers": [
+        "GM.US",
+        "BYDDY.US",
+        "ARI.US",
+        "C.US",
+        "BLK.US",
+        "SYK.US",
+        "ASML.US",
+        "TM.US",
+        "JPM.US",
+        "PG.US"
+      ],
+      "count": 13,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "fund_holder_conviction",
+      "params": {
+        "months": 12,
+        "min_funds": 5,
+        "limit": 25
+      },
+      "tickers": [
+        "ARI.US",
+        "NET.US",
+        "MCHP.US",
+        "SNA.US",
+        "LMND.US",
+        "ADP.US",
+        "LITE.US",
+        "AAOI.US",
+        "GM.US",
+        "QCOM.US"
+      ],
+      "count": 25,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "price_momentum_leaders",
+      "params": {
+        "limit": 50
+      },
+      "tickers": [
+        "AAOI.US",
+        "MU.US",
+        "RDW.US",
+        "INTC.US",
+        "AMAT.US",
+        "JEDI.US",
+        "ASML.US",
+        "ASML.NEO",
+        "QCOM.US",
+        "NET.US"
+      ],
+      "count": 22,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "price_momentum_leaders",
+      "params": {
+        "limit": 25
+      },
+      "tickers": [
+        "AAOI.US",
+        "MU.US",
+        "RDW.US",
+        "INTC.US",
+        "AMAT.US",
+        "JEDI.US",
+        "ASML.US",
+        "ASML.NEO",
+        "QCOM.US",
+        "NET.US"
+      ],
+      "count": 22,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "price_momentum_leaders",
+      "params": {
+        "limit": 25
+      },
+      "tickers": [
+        "AAOI.US",
+        "MU.US",
+        "RDW.US",
+        "INTC.US",
+        "AMAT.US",
+        "JEDI.US",
+        "ASML.US",
+        "ASML.NEO",
+        "QCOM.US",
+        "NET.US"
+      ],
+      "count": 22,
+      "insight": "See raw data",
+      "confidence": 0.5
+    },
+    {
+      "strategy": "dividend_income",
+      "params": {
+        "limit": 25
+      },
+      "tickers": [
+        "ASML.NEO",
+        "ARI.US",
+        "F.US",
+        "TM.US",
+        "PG.US",
+        "ADP.US",
+        "KO.US",
+        "SNA.US",
+        "HD.US",
+        "BLK.US"
+      ],
+      "count": 25,
+      "insight": "Investors seeking income through dividends may find ASML.NEO and ARI.US interesting.",
+      "confidence": 0.8
+    },
+    {
+      "strategy": "dividend_income",
+      "params": {
+        "limit": 25
+      },
+      "tickers": [
+        "ASML.NEO",
+        "ARI.US",
+        "F.US",
+        "TM.US",
+        "PG.US",
+        "ADP.US",
+        "KO.US",
+        "SNA.US",
+        "HD.US",
+        "BLK.US"
+      ],
+      "count": 25,
+      "insight": "High dividend yield stocks might be attractive for income-focused investors.",
+      "confidence": 0.8
+    },
+    {
+      "strategy": "dividend_income",
+      "params": {
+        "limit": 50
+      },
+      "tickers": [
+        "ASML.NEO",
+        "ARI.US",
+        "F.US",
+        "TM.US",
+        "PG.US",
+        "ADP.US",
+        "KO.US",
+        "SNA.US",
+        "HD.US",
+        "BLK.US"
+      ],
+      "count": 34,
+      "insight": "See raw data",
+      "confidence": 0.5
+    }
+  ]
+}
