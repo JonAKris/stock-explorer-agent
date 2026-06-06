@@ -15,19 +15,13 @@ The Stock Explorer Agent connects to a financial data warehouse (PostgreSQL), ex
 - 🏠 **100% local** — runs on a Minisforum MS-A1 with 96GB RAM
 
 ## Architecture
-┌─────────────────────────────────────────────────────────┐
 │ Stock Explorer Agent                                    │
-├────────────┬──────────────┬───────────┬─────────────────┤
+|------------|--------------|-----------|-----------------|
 │ database.py│ strategies.py│ llm.py    │ agent.py        │
 │ (Postgres  │ (10 strats)  │ (Ollama)  │ (Orchestrator)  │
 │ connector) │              │           │                 │
-└────────────┴──────────────┴───────────┴─────────────────┘
-│ │ │ │
-▼ ▼ ▼ ▼
-┌───────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────┐
 │ PostgreSQL│ │ Strategy │ │ Ollama   │ │ findings/    │
 │ (eodhd)   │ │ Results  │ │ Models   │ │ reports/     │
-└───────────┘ └──────────┘ └──────────┘ └──────────────┘
 
 text
 
@@ -103,7 +97,7 @@ cd stock-explorer-agent
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-2. Configure Database Access
+### 2. Configure Database Access
 bash
 cp config/.env.example config/.env
 nano config/.env
@@ -115,14 +109,14 @@ DB_PORT=5432
 DB_NAME=your_database_name
 DB_USER=readonly_user
 DB_PASSWORD=your_password
-3. Create Read-Only Database User
+### 3. Create Read-Only Database User
 sql
 CREATE USER readonly_agent WITH PASSWORD 'secure_password';
 GRANT CONNECT ON DATABASE eodhd TO readonly_agent;
 GRANT USAGE ON SCHEMA public TO readonly_agent;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO readonly_agent;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO readonly_agent;
-4. Install and Start Ollama
+### 4. Install and Start Ollama
 bash
 curl -fsSL https://ollama.com/install.sh | sh
 ollama serve &
@@ -130,32 +124,37 @@ ollama serve &
 # Pull required models
 ollama pull mistral:7b-instruct-v0.2-q8_0    # ~7.7 GB
 ollama pull mixtral:8x7b-instruct-v0.1-q5_K_M  # ~33 GB
-5. Test the Agent
+### 5. Test the Agent
 bash
 python src/agent.py
-6. Schedule Automatic Runs
+### 6. Schedule Automatic Runs
 bash
 sudo cp systemd/stock-explorer.service /etc/systemd/system/
 sudo cp systemd/stock-explorer.timer /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable stock-explorer.timer
 sudo systemctl start stock-explorer.timer
+
 Usage
 Manual Run
 bash
 source venv/bin/activate
 python src/agent.py
+
 View Latest Report
 bash
 python src/morningreport.py
+
 Check Timer Status
 bash
 systemctl list-timers stock-explorer.timer
+
 Add Shell Aliases (Optional)
 bash
 echo 'alias stocks-report="python ~/stock-explorer-agent/src/morningreport.py"' >> ~/.bashrc
 echo 'alias stocks-run="cd ~/stock-explorer-agent && source venv/bin/activate && python src/agent.py"' >> ~/.bashrc
 source ~/.bashrc
+
 Output
 Findings Directory Structure
 text
@@ -164,24 +163,7 @@ findings/
 ├── report_20260601_055950.md       # AI-generated investment report
 └── latest_results.json             # Symlink to most recent results
 Sample Report Output
-markdown
-# Investment Research Report
-**Generated:** 2026-06-01 06:00:55
 
-## Top Conviction Picks
-- **NVDA.US** (8 signals): value_quality, congressional_trading, sentiment_divergence, 
-  fund_holder_conviction, price_momentum_leaders, earnings_beaters, dividend_income
-- **ADP.US** (8 signals): Same strategies + congressional_selling_alert
-- **AXP.US** (8 signals): Broad strength across all factors
-
-## Sector Themes
-Technology and Financial sectors dominate the multi-signal landscape...
-
-## Risk Factors
-Congressional selling detected in RDW.US, NET.US, META.US...
-
-## Trade Idea
-Consider initiating a position in NVDA.US at current levels with a stop at...
 Project Structure
 text
 stock-explorer-agent/
@@ -201,6 +183,7 @@ stock-explorer-agent/
 ├── logs/                       # Agent logs
 ├── requirements.txt
 └── README.md
+
 How It Works
 Schema Discovery — Agent queries information_schema to understand table structure
 
@@ -235,12 +218,14 @@ python
     """,
     "params": {"limit": [25, 50]}
 }
+
 Changing Models
 Edit config/.env:
 
 bash
 EXPLORATION_MODEL=llama3:8b-instruct-q8_0
 ANALYSIS_MODEL=qwen3.6:27b
+
 Adjusting Schedule
 Edit /etc/systemd/system/stock-explorer.timer:
 
@@ -254,6 +239,7 @@ Strategies per run	30 (10 × 3 variations)
 Typical runtime	20-35 minutes
 RAM usage	~40GB (Mixtral model)
 Multi-signal stocks found	35+ per run
+
 Disclaimer
 This tool is for research and educational purposes only. It does not constitute financial advice. Past performance does not guarantee future results. Always conduct your own due diligence before making investment decisions.
 
