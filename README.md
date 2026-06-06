@@ -15,9 +15,9 @@ The Stock Explorer Agent connects to a financial data warehouse (PostgreSQL), ex
 - 🏠 **100% local** — runs on a Minisforum MS-A1 with 96GB RAM
 
 ## Architecture
-│ Stock Explorer Agent                                    │
+│ `Stock Explorer Agent`                                    │
 |------------|--------------|-----------|-----------------|
-│ database.py│ strategies.py│ llm.py    │ agent.py        │
+│ `database.py`│ `strategies.py`│ `llm.py` │ `agent.py`        │
 │ (Postgres  │ (10 strats)  │ (Ollama)  │ (Orchestrator)  │
 │ connector) │              │           │                 │
 │ PostgreSQL│ │ Strategy │ │ Ollama   │ │ findings/    │
