@@ -16,18 +16,18 @@ The Stock Explorer Agent connects to a financial data warehouse (PostgreSQL), ex
 
 ## Architecture
 ┌─────────────────────────────────────────────────────────┐
-│ Stock Explorer Agent │
-├───────────┬───────────┬───────────┬─────────────────────┤
-│ database.py│ strategies.py│ llm.py │ agent.py │
-│ (Postgres │ (10 strats) │ (Ollama) │ (Orchestrator) │
-│ connector)│ │ │ │
-└───────────┴───────────┴───────────┴─────────────────────┘
+│ Stock Explorer Agent                                    │
+├────────────┬──────────────┬───────────┬─────────────────┤
+│ database.py│ strategies.py│ llm.py    │ agent.py        │
+│ (Postgres  │ (10 strats)  │ (Ollama)  │ (Orchestrator)  │
+│ connector) │              │           │                 │
+└────────────┴──────────────┴───────────┴─────────────────┘
 │ │ │ │
 ▼ ▼ ▼ ▼
-┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────┐
-│ PostgreSQL│ │ Strategy │ │ Ollama │ │ findings/ │
-│ (eodhd) │ │ Results │ │ Models │ │ reports/ │
-└──────────┘ └──────────┘ └──────────┘ └──────────────┘
+┌───────────┐ ┌──────────┐ ┌──────────┐ ┌──────────────┐
+│ PostgreSQL│ │ Strategy │ │ Ollama   │ │ findings/    │
+│ (eodhd)   │ │ Results  │ │ Models   │ │ reports/     │
+└───────────┘ └──────────┘ └──────────┘ └──────────────┘
 
 text
 
@@ -97,7 +97,7 @@ rich>=13.7.1
 ### 1. Clone and Set Up
 
 ```bash
-git clone https://github.com/yourusername/stock-explorer-agent.git
+git clone https://github.com/JonAKris/stock-explorer-agent.git
 cd stock-explorer-agent
 
 python3 -m venv venv
@@ -118,7 +118,7 @@ DB_PASSWORD=your_password
 3. Create Read-Only Database User
 sql
 CREATE USER readonly_agent WITH PASSWORD 'secure_password';
-GRANT CONNECT ON DATABASE your_db TO readonly_agent;
+GRANT CONNECT ON DATABASE eodhd TO readonly_agent;
 GRANT USAGE ON SCHEMA public TO readonly_agent;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO readonly_agent;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO readonly_agent;
