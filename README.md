@@ -147,13 +147,13 @@ source venv/bin/activate
 python src/agent.py
 View Latest Report
 bash
-./scripts/morning_review.sh
+python src/morningreport.py
 Check Timer Status
 bash
 systemctl list-timers stock-explorer.timer
 Add Shell Aliases (Optional)
 bash
-echo 'alias stocks-report="~/stock-explorer-agent/scripts/morning_review.sh"' >> ~/.bashrc
+echo 'alias stocks-report="python ~/stock-explorer-agent/src/morningreport.py"' >> ~/.bashrc
 echo 'alias stocks-run="cd ~/stock-explorer-agent && source venv/bin/activate && python src/agent.py"' >> ~/.bashrc
 source ~/.bashrc
 Output
@@ -192,9 +192,8 @@ stock-explorer-agent/
 │   ├── agent.py                # Main orchestrator
 │   ├── database.py             # PostgreSQL connector
 │   ├── llm.py                  # Ollama LLM interface
+│   ├── morningreport.py        # Generate HTML report for emailing
 │   └── strategies.py           # 10 investment strategies
-├── scripts/
-│   └── morning_review.sh       # Quick morning report viewer
 ├── systemd/
 │   ├── stock-explorer.service  # Systemd service definition
 │   └── stock-explorer.timer    # 2 AM / 2 PM schedule
