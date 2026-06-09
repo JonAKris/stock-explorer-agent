@@ -41,10 +41,17 @@ class LLMInterface:
 
         return text.strip()
 
-    def interpret_results(self, context: str, df: pd.DataFrame, extra: dict = None) -> dict:
+    def interpret_results(self, context: str, df: pd.DataFrame) -> dict:
         """Have LLM analyze query results"""
         if df.empty:
-            return {"interpretation": "No results found", "confidence": 0.0, "tickers_of_interest": []}
+            return {
+                "interpretation": "No results found",
+                "confidence": 0.0,
+                "tickers_of_interest": [],
+                "key_insight": "",
+                "risk_factors": [],
+                "recommended_action": "WATCH",
+            }
 
         # Build concise summary
         tickers = df['ticker'].tolist()[:10] if 'ticker' in df.columns else []
@@ -75,17 +82,22 @@ Respond ONLY with valid JSON, no markdown:
                 "interpretation": f"Found {len(df)} results",
                 "confidence": 0.5,
                 "tickers_of_interest": tickers[:5],
-                "key_insight": "See raw data"
+                "key_insight": "See raw data",
+                "risk_factors": [],
+                "recommended_action": "WATCH",
             }
         except Exception as e:
             logger.error(f"LLM failed: {e}")
             return {
                 "interpretation": "LLM error",
                 "confidence": 0.0,
-                "tickers_of_interest": tickers[:5]
+                "tickers_of_interest": tickers[:5],
+                "key_insight": "",
+                "risk_factors": [],
+                "recommended_action": "WATCH",
             }
 
-    def synthesize_report(self, all_findings: list) -> str:
+    def synthesize_report(self, all_findings: list, universe_size: int = None) -> str:
         """Create final investment report"""
         # Extract key data
         ticker_signals = {}
@@ -99,9 +111,10 @@ Respond ONLY with valid JSON, no markdown:
 
         strategies_run = list(set(f.get('strategy', '') for f in all_findings))
 
+        universe = f"Database has {universe_size} active stocks. " if universe_size else ""
         prompt = f"""You are a portfolio strategist. Create an investment report.
 
-Database has 37 active stocks. {len(all_findings)} strategy variations were run across {len(strategies_run)} strategies.
+{universe}{len(all_findings)} strategy variations were run across {len(strategies_run)} strategies.
 
 Top conviction picks by signal count:
 {ticker_list}

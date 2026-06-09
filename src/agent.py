@@ -26,6 +26,7 @@ class StockExplorer:
         self.llm = LLMInterface()
         self.findings = []
         self.start_time = datetime.now()
+        self.universe_size = None
 
         # Setup logging
         logger.add("logs/agent_{time}.log", rotation="1 day", retention="7 days")
@@ -42,6 +43,10 @@ class StockExplorer:
             schema = self.db.get_schema()
             stats = self.db.get_table_stats()
             total_rows = sum(s['row_count'] for s in stats)
+            # Real universe size for the report (falls back to None if table absent)
+            self.universe_size = next(
+                (s['row_count'] for s in stats if s['table_name'] == 'fundamentals'), None
+            )
             console.print(f"[green]✓[/green] Connected: {len(schema)} tables, {total_rows:,} total rows")
 
             # Show key tables
@@ -99,6 +104,7 @@ class StockExplorer:
             console.print(f"[green]✓[/green] Found {len(multi_signal)} stocks with multiple signals")
 
             # Deep dive top multi-signal stocks
+            top_tickers = []
             if multi_signal:
                 top_tickers = sorted(multi_signal.items(), key=lambda x: len(x[1]), reverse=True)[:10]
                 console.print(f"\n[bold]Deep diving top {len(top_tickers)} conviction picks:[/bold]")
@@ -108,11 +114,11 @@ class StockExplorer:
                     console.print(f"  [cyan]🔍 {ticker}[/cyan] - {len(signals)} signals: {signals_str}")
 
             # Save results
-            self.save_results(all_results, multi_signal, top_tickers if multi_signal else [])
+            self.save_results(all_results, multi_signal, top_tickers)
 
             # Synthesize report
             console.print("\n[bold]Generating investment report...[/bold]")
-            report = self.llm.synthesize_report(all_results)
+            report = self.llm.synthesize_report(all_results, universe_size=self.universe_size)
             self.save_report(report)
 
             console.rule("[bold green]✅ Exploration Complete!")
