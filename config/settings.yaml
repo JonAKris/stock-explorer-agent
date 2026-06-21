@@ -8,7 +8,7 @@ database:
 ollama:
   host: "http://127.0.0.1:11434"
   exploration_model: "mistral:7b-instruct-v0.2-q8_0"
-  analysis_model: "mixtral:8x7b-instruct-v0.1-q5_K_M"
+  analysis_model: "llama3.2:latest"
 
 agent:
   max_exploration_depth: 5
