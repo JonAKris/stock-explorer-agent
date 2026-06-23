@@ -8,7 +8,7 @@ The Stock Explorer Agent connects to a financial data warehouse (PostgreSQL), ex
 
 **Key Features:**
 - 🔍 **9 investment strategies** across value, growth, momentum, sentiment, insider activity, and institutional flows
-- 🧠 **Local LLM analysis** via Ollama (Mistral 7B + Mixtral 8x7B) — no API costs
+- 🧠 **Local LLM analysis** via Ollama (Mistral 7B + llama3.2:latest) — no API costs
 - 🔗 **Multi-signal cross-referencing** — finds stocks appearing across multiple strategies
 - 📊 **AI-generated investment reports** with conviction picks, sector themes, and risk factors
 - ⏰ **Scheduled autonomous runs** at 2 AM and 2 PM daily via systemd
@@ -148,7 +148,7 @@ ollama serve &
 
 # Pull required models
 ollama pull mistral:7b-instruct-v0.2-q8_0      # ~7.7 GB
-ollama pull mixtral:8x7b-instruct-v0.1-q5_K_M  # ~33 GB
+ollama pull llama3.2:latest                    # ~2 GB
 ```
 
 ### 5. Test the Agent
