@@ -231,5 +231,150 @@ STRATEGIES = {
         ORDER BY f.dividend_yield DESC LIMIT {limit}
         """,
         "params": {"limit": [25, 50]}
+    },
+    
+
+    # ---- 1. Holder-centric: rank institutions by benchmark-relative alpha ----
+    "institutional_holder_alpha": {
+        "query": """
+        WITH snapshot AS (
+          SELECT DISTINCT ON (h.holder_name, h.ticker)
+            h.holder_name, h.ticker, h.report_date, h.shares_held, h.pct_shares
+          FROM institutional_holders h
+          WHERE h.report_date >= CURRENT_DATE - INTERVAL '{lookback_days} days'
+            AND h.shares_held > 0
+          ORDER BY h.holder_name, h.ticker, h.report_date DESC
+        ),
+        priced AS (
+          SELECT s.*, p0.close AS price_at_report, pn.close AS price_now, pn.date AS asof_date
+          FROM snapshot s
+          JOIN LATERAL (SELECT close FROM eod_prices
+                        WHERE ticker=s.ticker AND date<=s.report_date
+                        ORDER BY date DESC LIMIT 1) p0 ON true
+          JOIN LATERAL (SELECT close, date FROM eod_prices
+                        WHERE ticker=s.ticker
+                        -- for a fixed-horizon variant instead, add:
+                        -- AND date <= s.report_date + INTERVAL '{lookback_days} days'
+                        ORDER BY date DESC LIMIT 1) pn ON true
+          WHERE p0.close > 0
+        ),
+        benched AS (
+          SELECT pr.*, b0.close AS bench_at_report, bn.close AS bench_now
+          FROM priced pr
+          JOIN LATERAL (SELECT close FROM eod_prices
+                        WHERE ticker='{benchmark}' AND date<=pr.report_date
+                        ORDER BY date DESC LIMIT 1) b0 ON true
+          JOIN LATERAL (SELECT close FROM eod_prices
+                        WHERE ticker='{benchmark}' AND date<=pr.asof_date
+                        ORDER BY date DESC LIMIT 1) bn ON true
+          WHERE b0.close > 0
+        ),
+        positions AS (
+          SELECT *,
+            shares_held * price_at_report AS value_at_report,
+            (price_now / price_at_report - 1.0)
+              - (bench_now / bench_at_report - 1.0) AS fwd_alpha
+          FROM benched
+        )
+        SELECT
+          holder_name,
+          COUNT(*)                                                           AS positions_tracked,
+          ROUND(SUM(value_at_report))                                        AS book_value_at_report,
+          -- value-weighted alpha vs benchmark since filing (primary rank key)
+          ROUND((SUM(fwd_alpha * value_at_report)
+                 / NULLIF(SUM(value_at_report), 0) * 100)::numeric, 2)        AS vw_fwd_alpha_pct,
+          ROUND((AVG(fwd_alpha) * 100)::numeric, 2)                          AS avg_fwd_alpha_pct,
+          -- fraction of positions that beat the benchmark
+          ROUND(AVG(CASE WHEN fwd_alpha > 0 THEN 1.0 ELSE 0.0 END), 3)       AS beat_rate,
+          MAX(report_date)                                                   AS latest_report
+        FROM positions
+        GROUP BY holder_name
+        HAVING COUNT(*) >= {min_positions}
+        ORDER BY vw_fwd_alpha_pct DESC
+        LIMIT {limit}
+        """,
+        "params": {
+            "lookback_days": [180, 365],
+            "min_positions": [5, 10, 20],
+            "benchmark": ["SPY.US"],
+            "limit": [25, 50],
+        },
+    },
+ 
+    # ---- 2. Ticker-centric: stocks held by top-ALPHA institutions ----
+    # Top-quartile selection now uses alpha, which removes the small-cap-beta
+    # tilt that raw forward return introduced into the surfaced tickers.
+    "smart_institution_holdings": {
+        "query": """
+        WITH snapshot AS (
+          SELECT DISTINCT ON (h.holder_name, h.ticker)
+            h.holder_name, h.ticker, h.report_date, h.shares_held
+          FROM institutional_holders h
+          WHERE h.report_date >= CURRENT_DATE - INTERVAL '{lookback_days} days'
+            AND h.shares_held > 0
+          ORDER BY h.holder_name, h.ticker, h.report_date DESC
+        ),
+        priced AS (
+          SELECT s.*, p0.close AS price_at_report, pn.close AS price_now, pn.date AS asof_date
+          FROM snapshot s
+          JOIN LATERAL (SELECT close FROM eod_prices
+                        WHERE ticker=s.ticker AND date<=s.report_date
+                        ORDER BY date DESC LIMIT 1) p0 ON true
+          JOIN LATERAL (SELECT close, date FROM eod_prices
+                        WHERE ticker=s.ticker
+                        ORDER BY date DESC LIMIT 1) pn ON true
+          WHERE p0.close > 0
+        ),
+        benched AS (
+          SELECT pr.*, b0.close AS bench_at_report, bn.close AS bench_now
+          FROM priced pr
+          JOIN LATERAL (SELECT close FROM eod_prices
+                        WHERE ticker='{benchmark}' AND date<=pr.report_date
+                        ORDER BY date DESC LIMIT 1) b0 ON true
+          JOIN LATERAL (SELECT close FROM eod_prices
+                        WHERE ticker='{benchmark}' AND date<=pr.asof_date
+                        ORDER BY date DESC LIMIT 1) bn ON true
+          WHERE b0.close > 0
+        ),
+        holder_perf AS (
+          SELECT holder_name,
+            SUM(((price_now/price_at_report - 1.0) - (bench_now/bench_at_report - 1.0))
+                * shares_held * price_at_report)
+              / NULLIF(SUM(shares_held * price_at_report), 0) AS vw_fwd_alpha
+          FROM benched
+          GROUP BY holder_name
+          HAVING COUNT(*) >= {min_positions}
+        ),
+        top_holders AS (
+          SELECT holder_name FROM holder_perf
+          WHERE vw_fwd_alpha >= (
+            SELECT percentile_cont(0.75) WITHIN GROUP (ORDER BY vw_fwd_alpha)
+            FROM holder_perf
+          )
+        )
+        SELECT
+          h.ticker, f.name, f.sector, f.market_cap, f.pe_ratio,
+          COUNT(DISTINCT h.holder_name)            AS smart_holders,
+          STRING_AGG(DISTINCT h.holder_name, ', ') AS holders,
+          e.close                                  AS price
+        FROM institutional_holders h
+        JOIN top_holders th ON th.holder_name = h.holder_name
+        JOIN fundamentals f ON f.ticker = h.ticker
+        JOIN eod_prices e   ON e.ticker = h.ticker
+                           AND e.date = (SELECT MAX(date) FROM eod_prices WHERE ticker=h.ticker)
+        WHERE f.is_delisted = false
+          AND h.report_date >= CURRENT_DATE - INTERVAL '{lookback_days} days'
+        GROUP BY h.ticker, f.name, f.sector, f.market_cap, f.pe_ratio, e.close
+        HAVING COUNT(DISTINCT h.holder_name) >= {min_smart_holders}
+        ORDER BY smart_holders DESC
+        LIMIT {limit}
+        """,
+        "params": {
+            "lookback_days": [180, 365],
+            "min_positions": [5, 10],
+            "min_smart_holders": [2, 3, 5],
+            "benchmark": ["SPY.US"],
+            "limit": [25, 50],
+        },
     }
 }

@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Autonomous Stock Explorer - Main Agent"""
 import json
+import math
 import random
 import sys
-from datetime import datetime
+from datetime import datetime, date
+from decimal import Decimal
 from pathlib import Path
 from collections import Counter
 import pandas as pd
@@ -20,6 +22,92 @@ load_dotenv('config/.env')
 console = Console()
 
 
+def _jsonable(v):
+    """Coerce a single DB/pandas value to a JSON-native type."""
+    if isinstance(v, Decimal):
+        v = float(v)
+    elif isinstance(v, (datetime, date)):
+        return v.isoformat()
+    elif hasattr(v, 'item') and not isinstance(v, (str, bytes)):
+        try:
+            v = v.item()           # numpy scalar -> python scalar
+        except Exception:
+            return v
+    if isinstance(v, float) and math.isnan(v):
+        return None                # JSON has no NaN
+    return v
+
+
+def _jsonable_rows(records):
+    """Coerce a list of row dicts so persisted data keeps real numbers/ISO dates."""
+    return [{k: _jsonable(val) for k, val in rec.items()} for rec in records]
+
+
+def _fnum(v):
+    """Coerce a numeric DB value to a plain float, or None."""
+    if v is None:
+        return None
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return None
+    return None if math.isnan(f) else f
+
+
+def build_facts(db, top_tickers):
+    """Deterministically gather facts for the top conviction tickers straight
+    from the database -- name, sector, latest price, and a few key metrics.
+
+    No LLM is involved: these are the authoritative identities/numbers the
+    report templates verbatim, so the model can never rename a ticker or
+    invent a figure. Returns a list of dicts (one per ticker, in rank order).
+    """
+    if not top_tickers:
+        return []
+
+    tickers = [t for t, _ in top_tickers]
+    rows = []
+    try:
+        _, rows = db.execute(
+            """
+            SELECT f.ticker, f.name, f.sector, f.industry, f.market_cap,
+                   f.pe_ratio, f.return_on_equity, f.profit_margin,
+                   f.dividend_yield, f.quarterly_revenue_growth,
+                   e.close AS price
+            FROM fundamentals f
+            LEFT JOIN LATERAL (
+                SELECT close FROM eod_prices
+                WHERE ticker = f.ticker ORDER BY date DESC LIMIT 1
+            ) e ON true
+            WHERE f.ticker = ANY(%s)
+            """,
+            (tickers,),
+        )
+    except Exception as exc:
+        logger.warning(f"Facts lookup failed ({exc}); picks will show tickers only.")
+        rows = []
+
+    by_ticker = {r["ticker"]: r for r in rows}
+    facts = []
+    for ticker, signals in top_tickers:
+        r = by_ticker.get(ticker, {})
+        facts.append({
+            "ticker": ticker,
+            "name": r.get("name") or "(name unavailable)",
+            "sector": r.get("sector") or "",
+            "industry": r.get("industry") or "",
+            "signals": list(signals),
+            "price": _fnum(r.get("price")),
+            "market_cap": _fnum(r.get("market_cap")),
+            "pe_ratio": _fnum(r.get("pe_ratio")),
+            "return_on_equity": _fnum(r.get("return_on_equity")),
+            "profit_margin": _fnum(r.get("profit_margin")),
+            "dividend_yield": _fnum(r.get("dividend_yield")),
+            "rev_growth": _fnum(r.get("quarterly_revenue_growth")),
+        })
+    return facts
+
+
 class StockExplorer:
     def __init__(self):
         self.db = DatabaseConnector()
@@ -28,7 +116,6 @@ class StockExplorer:
         self.start_time = datetime.now()
         self.universe_size = None
 
-        # Setup logging
         logger.add("logs/agent_{time}.log", rotation="1 day", retention="7 days")
 
     def run(self):
@@ -39,21 +126,17 @@ class StockExplorer:
         try:
             self.db.connect()
 
-            # Discover schema
             schema = self.db.get_schema()
             stats = self.db.get_table_stats()
             total_rows = sum(s['row_count'] for s in stats)
-            # Real universe size for the report (falls back to None if table absent)
             self.universe_size = next(
                 (s['row_count'] for s in stats if s['table_name'] == 'fundamentals'), None
             )
             console.print(f"[green]✓[/green] Connected: {len(schema)} tables, {total_rows:,} total rows")
 
-            # Show key tables
             for s in stats[:10]:
                 console.print(f"  [dim]• {s['table_name']}: {s['row_count']:,} rows[/dim]")
 
-            # Run all strategies
             with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), console=console) as progress:
                 task = progress.add_task("[cyan]Executing investment strategies...", total=len(STRATEGIES) * 3)
 
@@ -79,6 +162,7 @@ class StockExplorer:
                                     'tickers_found': df['ticker'].tolist() if 'ticker' in df.columns else [],
                                     'row_count': len(df),
                                     'interpretation': interpretation,
+                                    'top_rows': df.head(15).to_dict('records'),
                                     'timestamp': datetime.now().isoformat()
                                 })
 
@@ -93,7 +177,6 @@ class StockExplorer:
 
                         progress.advance(task)
 
-            # Cross-reference findings
             console.print("\n[bold]Cross-referencing multi-signal stocks...[/bold]")
             ticker_signals = {}
             for r in all_results:
@@ -103,22 +186,20 @@ class StockExplorer:
             multi_signal = {t: list(set(s)) for t, s in ticker_signals.items() if len(set(s)) >= 2}
             console.print(f"[green]✓[/green] Found {len(multi_signal)} stocks with multiple signals")
 
-            # Deep dive top multi-signal stocks
             top_tickers = []
             if multi_signal:
                 top_tickers = sorted(multi_signal.items(), key=lambda x: len(x[1]), reverse=True)[:10]
                 console.print(f"\n[bold]Deep diving top {len(top_tickers)} conviction picks:[/bold]")
-
                 for ticker, signals in top_tickers:
-                    signals_str = ', '.join(signals)
-                    console.print(f"  [cyan]🔍 {ticker}[/cyan] - {len(signals)} signals: {signals_str}")
+                    console.print(f"  [cyan]🔍 {ticker}[/cyan] - {len(signals)} signals: {', '.join(signals)}")
 
-            # Save results
-            self.save_results(all_results, multi_signal, top_tickers)
+            # Deterministic facts for the conviction picks (authoritative names/numbers)
+            facts = build_facts(self.db, top_tickers)
 
-            # Synthesize report
+            self.save_results(all_results, multi_signal, top_tickers, facts)
+
             console.print("\n[bold]Generating investment report...[/bold]")
-            report = self.llm.synthesize_report(all_results, universe_size=self.universe_size)
+            report = self.llm.synthesize_report(facts, all_results, universe_size=self.universe_size)
             self.save_report(report)
 
             console.rule("[bold green]✅ Exploration Complete!")
@@ -132,7 +213,7 @@ class StockExplorer:
         finally:
             self.db.close()
 
-    def save_results(self, results, multi_signal, top_tickers):
+    def save_results(self, results, multi_signal, top_tickers, facts):
         """Save raw findings"""
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
 
@@ -142,13 +223,16 @@ class StockExplorer:
             'total_tickers_found': len(set(t for r in results for t in r.get('tickers_found', []))),
             'multi_signal_stocks': {t: s for t, s in multi_signal.items()},
             'top_conviction': [{'ticker': t, 'signals': s} for t, s in top_tickers],
+            # Authoritative, grounded facts for the conviction picks
+            'top_conviction_facts': _jsonable_rows(facts),
             'results': [{
                 'strategy': r['strategy'],
                 'params': r['params'],
                 'tickers': r['tickers_found'][:10],
                 'count': r['row_count'],
                 'insight': r['interpretation'].get('key_insight', ''),
-                'confidence': r['interpretation'].get('confidence', 0)
+                'confidence': r['interpretation'].get('confidence', 0),
+                'top_rows': _jsonable_rows(r.get('top_rows', []))
             } for r in results]
         }
 
@@ -156,7 +240,6 @@ class StockExplorer:
         with open(filepath, 'w') as f:
             json.dump(output, f, indent=2, default=str)
 
-        # Update latest symlink
         latest = Path("findings/latest_results.json")
         if latest.exists():
             latest.unlink()
